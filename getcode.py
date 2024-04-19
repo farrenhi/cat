@@ -23,7 +23,9 @@ def get_code(total_values=4, duplicate=False):
     else:
         find_no_duplicate = False
         while not find_no_duplicate:
-            # future task: infinity loop or too many requests to external API?
+            # future task: 
+            # 1. infinity loop or too many requests to external API?
+            # 2. time bottleneck: or try a different external API for non duplicates?
             numbers = call_api_code(max_value)
             numbers_set = set(numbers)
             if len(numbers_set) == 4:
