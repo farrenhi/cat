@@ -24,7 +24,6 @@ def announce(user_attempt, number_boolean, position_boolean, \
             announce_statement = "All good. You win!"
         else:
             # future task: how to make the plural correct... currently, (s) would be ok!
-
             announce_statement = f"{counter_correct_number} correct number(s) and {position_true_count} correct location(s)."
     
     elif difficulty_level == 2: # hard
@@ -35,7 +34,7 @@ def announce(user_attempt, number_boolean, position_boolean, \
     else:
         print("wrong input for difficulty level!")
         
-    print(announce_statement)
+    print("Feedback:", announce_statement)
     return announce_statement
 
 # number_boolean=[True, True, True, True], \

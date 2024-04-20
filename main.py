@@ -4,14 +4,12 @@ import show_result
 
 print("Hello, are you ready for the game?")
 
-
 ### game configuration
 difficulty_level = 1
 duplicate = True
 total_values = 8 # total is 8, but it would be between 0 and 7.
 max_attempts = 10
 ###
-
 
 #####################
 num_attempts = 1
@@ -33,18 +31,23 @@ def validate_input(user_input):
         return False
     return True
 
-def print_history(user_attempts, feedbacks):
-    for attempt, feedback in zip(user_attempts, feedbacks):
-        print(f"User Attempt: {attempt}, Feedback: {feedback}")
+def print_history(user_attempts=[], feedbacks=[]):
+    if not len(user_attempts):
+        print("No history data...")
+        return
+    for i, (attempt, feedback) in enumerate(zip(user_attempts, feedbacks), start=1):
+        print(f"User Attempt {i}: {attempt}, Feedback: {feedback}")
 
 # while loop for 10 attempts
 while num_attempts < max_attempts + 1:
     is_user_input_valid = False
 
     while is_user_input_valid is False:
-        user_input = input("Guess a sequence of four numbers (example: 3102): ")
+        user_input = input("Guess a sequence of four numbers (example: 3102) or enter h to see the history : ")
         # user_input is a string data type!
-        if validate_input(user_input):
+        if user_input == "h":
+            print_history(user_attempts, feedbacks)  
+        elif validate_input(user_input):
             is_user_input_valid = True
         else:
             print("Please input 4 digit of numbers.")
@@ -65,8 +68,7 @@ while num_attempts < max_attempts + 1:
     
     print(f"Number of guesses remaining:", max_attempts - num_attempts + 1)
     print('--------------------------')
-    # print('History of Guess and Feedback', user_attempts, feedbacks)
-    print_history(user_attempts, feedbacks)
+    
 
     # minor task: this part could be replaced by "function validate"
     if user_attempt == secret_code: 
