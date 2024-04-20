@@ -34,9 +34,9 @@ def validate(secret_code, user_attempt):
         counter_correct_number += min(user_attempt.count(number), secret_code.count(number))
 
     
-    print("number_boolean:", number_boolean)
-    print("position_boolean:", position_boolean)
-    print("counter_correct_number:", counter_correct_number)
+    # print("number_boolean:", number_boolean)
+    # print("position_boolean:", position_boolean)
+    # print("counter_correct_number:", counter_correct_number)
     return number_boolean, position_boolean, counter_correct_number
 
 # validate()
