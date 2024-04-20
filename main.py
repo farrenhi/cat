@@ -47,7 +47,6 @@ while num_attempts < max_attempts + 1:
     user_attempt = [int(digit) for digit in user_input] # convert string into integer
     print(f"Your Guess Attempt {num_attempts}:", user_attempt)
         
-
     num_attempts += 1
 
     user_attempts.append(user_attempt)
@@ -61,7 +60,8 @@ while num_attempts < max_attempts + 1:
     print(f"Number of guesses remaining:", max_attempts - num_attempts + 1)
     print('--------------------------')
 
-    if user_attempt == secret_code:
+    # minor task: this part could be replaced by "function validate"
+    if user_attempt == secret_code: 
         print("Congratulations! You guessed the code correctly!")
         break
     
