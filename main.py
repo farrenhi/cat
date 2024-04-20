@@ -18,7 +18,7 @@ secret_code = getcode.get_code(total_values, duplicate)
 
 # Future task: this would take a wile to generate non duplicate secret code
 # how to solve this long wait?
-print("Secret code is generated!", secret_code)
+print("Secret code is generated! Developer mode to show code:", secret_code)
 
 # Initialize an empty list to store user inputs
 user_attempts = []
