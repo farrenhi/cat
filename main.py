@@ -18,6 +18,7 @@ def print_history(user_attempts=[], feedbacks=[]):
         print(f"User Attempt {i}: {attempt}, Feedback: {feedback}")
 
 def play():
+    # future task: need to do a figuration setting and load it into play function. currently, just put inside...
 
     print("Hello, are you ready for the game?")
 
