@@ -3,7 +3,9 @@
 # based on the difficulty level, the code would choose what to reveal or not
 # this code would provide the full visibility of the info (number and position)
 
-def validate(secret_code=[1, 2, 3, 0], user_attempt=[2, 1, 3, 0]):
+
+# def validate(secret_code=[1, 2, 3, 0], user_attempt=[2, 1, 3, 0]):
+def validate(secret_code, user_attempt):
     '''
     The validate function would check the secret_code and user_attempt.
     Input: two arrays of numbers. secret_code and user_attempt
