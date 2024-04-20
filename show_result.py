@@ -36,6 +36,7 @@ def announce(user_attempt, number_boolean, position_boolean, \
         print("wrong input for difficulty level!")
         
     print(announce_statement)
+    return announce_statement
 
 # number_boolean=[True, True, True, True], \
     # position_boolean=[False, False, False, True]

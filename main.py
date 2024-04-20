@@ -24,6 +24,7 @@ print("Secret code is generated!", secret_code)
 
 # Initialize an empty list to store user inputs
 user_attempts = []
+feedbacks = []
 
 def validate_input(user_input):
     if len(user_input) != 4:
@@ -31,6 +32,10 @@ def validate_input(user_input):
     if not user_input.isdigit():
         return False
     return True
+
+def print_history(user_attempts, feedbacks):
+    for attempt, feedback in zip(user_attempts, feedbacks):
+        print(f"User Attempt: {attempt}, Feedback: {feedback}")
 
 # while loop for 10 attempts
 while num_attempts < max_attempts + 1:
@@ -46,7 +51,6 @@ while num_attempts < max_attempts + 1:
 
     user_attempt = [int(digit) for digit in user_input] # convert string into integer
     print(f"Your Guess Attempt {num_attempts}:", user_attempt)
-        
     num_attempts += 1
 
     user_attempts.append(user_attempt)
@@ -54,11 +58,15 @@ while num_attempts < max_attempts + 1:
     number_boolean, position_boolean, counter_correct_number = \
         validate.validate(secret_code=secret_code, user_attempt=user_attempt)
 
-    show_result.announce(user_attempt, number_boolean, position_boolean, \
+    feedback = show_result.announce(user_attempt, number_boolean, position_boolean, \
         counter_correct_number, difficulty_level)
+
+    feedbacks.append(feedback)
     
     print(f"Number of guesses remaining:", max_attempts - num_attempts + 1)
     print('--------------------------')
+    # print('History of Guess and Feedback', user_attempts, feedbacks)
+    print_history(user_attempts, feedbacks)
 
     # minor task: this part could be replaced by "function validate"
     if user_attempt == secret_code: 
