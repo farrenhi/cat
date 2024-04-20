@@ -10,11 +10,12 @@ print("Hello, are you ready for the game?")
 ### user input
 user_attempt = [3, 2, 0, 1]
 difficulty_level = 1
-duplicate = False
+duplicate = True
+total_values = 8
 ###
 
 
-secret_code = getcode.get_code(total_values=4, duplicate=duplicate)
+secret_code = getcode.get_code(total_values, duplicate)
 # Future task: this would take a wile to generate non duplicate secret code
 
 print("Secret code is generated!", secret_code)
