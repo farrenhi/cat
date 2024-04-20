@@ -4,7 +4,7 @@
 # this code would provide the full visibility of the info (number and position)
 
 
-# def validate(secret_code=[1, 2, 3, 0], user_attempt=[2, 1, 3, 0]):
+# def validate(secret_code=[0, 1, 3, 5], user_attempt=[0, 1, 5, 6]):
 def validate(secret_code, user_attempt):
     '''
     The validate function would check the secret_code and user_attempt.
@@ -14,6 +14,9 @@ def validate(secret_code, user_attempt):
     '''
     number_boolean = []
     position_boolean = []
+    counter_correct_number = 0
+
+    
     secret_code_set = set(secret_code)
     for index, value in enumerate(user_attempt):
         if value in secret_code_set:
@@ -26,8 +29,14 @@ def validate(secret_code, user_attempt):
         else: # if value is not in secret_set, then position is also False
             number_boolean.append(False)
             position_boolean.append(False)
-    
-    # print("number_boolean:", number_boolean)
-    # print("position_boolean", position_boolean)
-    return number_boolean, position_boolean
+            
+    for number in secret_code_set:
+        counter_correct_number += min(user_attempt.count(number), secret_code.count(number))
 
+    
+    print("number_boolean:", number_boolean)
+    print("position_boolean:", position_boolean)
+    print("counter_correct_number:", counter_correct_number)
+    return number_boolean, position_boolean, counter_correct_number
+
+# validate()
