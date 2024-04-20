@@ -6,7 +6,7 @@
 def validate(secret_code=[1, 2, 3, 0], user_attempt=[2, 1, 3, 0]):
     '''
     The validate function would check the secret_code and user_attempt.
-    Input: two arrays of number. secret_code and user_attempt
+    Input: two arrays of numbers. secret_code and user_attempt
     Output: two arrays of booleans. number correctness and position correctness 
     
     '''
@@ -25,7 +25,7 @@ def validate(secret_code=[1, 2, 3, 0], user_attempt=[2, 1, 3, 0]):
             number_boolean.append(False)
             position_boolean.append(False)
     
-    print("number_boolean:", number_boolean)
-    print("position_boolean", position_boolean)
+    # print("number_boolean:", number_boolean)
+    # print("position_boolean", position_boolean)
     return number_boolean, position_boolean
 
