@@ -20,8 +20,6 @@ secret_code = getcode.get_code(total_values, duplicate)
 
 print("Secret code is generated!", secret_code)
 
-
-
 number_boolean, position_boolean, counter_correct_number = \
     validate.validate(secret_code=secret_code, user_attempt=user_attempt)
 
