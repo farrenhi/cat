@@ -42,7 +42,7 @@ def announce(user_attempt, number_boolean, position_boolean, \
 
 def explain(number_boolean, position_boolean, user_attempt):
     statement = []
-    print(position_boolean)
+    print("Correctness:", position_boolean)
     for index, value in enumerate(position_boolean):
         if value is True:
             statement.append(f"Position {index} is correct. ")

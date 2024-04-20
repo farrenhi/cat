@@ -5,16 +5,16 @@ import show_result
 print("Hello, are you ready for the game?")
 
 
-### user input
+### game configuration
 difficulty_level = 1
 duplicate = True
-total_values = 8
+total_values = 8 # total is 8, but it would be between 0 and 7.
+max_attempts = 10
 ###
 
 
 #####################
 num_attempts = 1
-max_attempts = 10
 
 secret_code = getcode.get_code(total_values, duplicate)
 
@@ -38,12 +38,13 @@ while num_attempts < max_attempts + 1:
 
     while is_user_input_valid is False:
         user_input = input("Guess a sequence of four numbers (example: 3102): ")
+        # user_input is a string data type!
         if validate_input(user_input):
             is_user_input_valid = True
         else:
             print("Please input 4 digit of numbers.")
 
-    user_attempt = [int(digit) for digit in user_input]
+    user_attempt = [int(digit) for digit in user_input] # convert string into integer
     print(f"Your Guess Attempt {num_attempts}:", user_attempt)
         
 
@@ -57,6 +58,7 @@ while num_attempts < max_attempts + 1:
     show_result.announce(user_attempt, number_boolean, position_boolean, \
         counter_correct_number, difficulty_level)
     
+    print(f"Number of guesses remaining:", max_attempts - num_attempts + 1)
     print('--------------------------')
 
     if user_attempt == secret_code:
