@@ -4,6 +4,9 @@
 # example link from the api website:
 # https://www.random.org/integers/?num=4&min=0&max=7&col=1&base=10&format=plain&rnd=new
 
+
+# future task: one digit per request!
+
 import requests
 
 def get_code(total_values=4, duplicate=False):
