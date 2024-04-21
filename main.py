@@ -1,7 +1,7 @@
 import getcode
 import validate
 import show_result
-from concurrency import remaining_time
+import shared_variables
 
 def validate_input(user_input):
     if len(user_input) != 4:
@@ -19,7 +19,6 @@ def print_history(user_attempts=[], feedbacks=[]):
 
 def play():
     # future task: need to do a figuration setting and load it into play function. currently, just put inside...
-    global remaining_time
     print("Hello, are you ready for the game?")
 
     ### game configuration
@@ -47,7 +46,7 @@ def play():
         is_user_input_valid = False
 
         while is_user_input_valid is False:
-            print("remaining time:", remaining_time, "second(s)")
+            print("remaining time:", shared_variables.remaining_time['time'], "second(s)")
             user_input = input("Guess a sequence of four numbers (example: 3102) or enter h to see the history : ")
             # user_input is a string data type!
             if user_input == "h":
