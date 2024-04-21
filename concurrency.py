@@ -57,15 +57,21 @@ def input_numbers():
 if __name__ == "__main__":
     timer_completed = threading.Event()
 
-    countdown_thread = threading.Thread(target=countdown_timer, args=(180, timer_completed))
+    countdown_thread = threading.Thread(target=countdown_timer, args=(30, timer_completed))
+    # , daemon=True
+    
     # input_thread = threading.Thread(target=input_numbers, args=(timer_completed, ), daemon=True)
     input_thread = threading.Thread(target=input_numbers, daemon=True)
+    
+    # If daemon is set to True, it means the thread will run as a daemon thread. 
+    # Daemon threads are background threads that 
+    # do not prevent the program from exiting if they are still running when the main thread finishes.
 
 
     countdown_thread.start()
     input_thread.start()
 
-    countdown_thread.join()
+    # countdown_thread.join()
     # input_thread.join()
     sys.exit()
 
