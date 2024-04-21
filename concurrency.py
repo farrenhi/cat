@@ -1,14 +1,20 @@
 import threading
 import time
 import sys
+import main
+
+remaining_time = {time: 0}
 
 def countdown_timer(duration, timer_completed):
-    global remaining_time
+    # global remaining_time
     start_time = time.time()
     end_time = start_time + duration
 
     while time.time() < end_time:
-        remaining_time = int(end_time - time.time())
+        # remaining_time = int(end_time - time.time())
+        time_updated = int(end_time - time.time())
+        
+        
         # Print timer on the same line
         # print(f"\rTime remaining: {remaining_time} seconds. Enter a number:", end="")  
         # sys.stdout.flush()
@@ -32,6 +38,12 @@ def input_numbers(timer_completed):
         print("remaining time:", remaining_time, "second(s)")
         # task: i would like to print remaining time here. how should i do that?
     # sys.exit()
+
+def input_numbers(timer_completed):
+    global remaining_time
+    main.play()
+    
+
 
 # def input_numbers(timer_completed):
 #     while not timer_completed.is_set():  # Continue asking for input while the timer hasn't expired
