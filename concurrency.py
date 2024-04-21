@@ -4,8 +4,6 @@ import sys
 import main
 import shared_variables
 
-
-
 def countdown_timer(duration, timer_completed):
     # global remaining_time
     start_time = time.time()
@@ -15,6 +13,9 @@ def countdown_timer(duration, timer_completed):
         # remaining_time = int(end_time - time.time())
         time_updated = int(end_time - time.time())
         shared_variables.remaining_time['time'] = time_updated
+        
+        if shared_variables.input_thread['end']:
+            sys.exit()
         
         # Print timer on the same line
         # print(f"\rTime remaining: {remaining_time} seconds. Enter a number:", end="")  
@@ -68,8 +69,12 @@ if __name__ == "__main__":
     # do not prevent the program from exiting if they are still running when the main thread finishes.
 
 
-    countdown_thread.start()
+    
     input_thread.start()
+    countdown_thread.start()
+    
+    
+    
 
     # countdown_thread.join()
     # input_thread.join()

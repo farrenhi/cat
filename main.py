@@ -77,9 +77,11 @@ def play():
         # minor task: this part could be replaced by "function validate"
         if user_attempt == secret_code: 
             print("Congratulations! You win!")
+            shared_variables.input_thread['end'] = True
             break
         
     if num_attempts == max_attempts + 1:
+        shared_variables.input_thread['end'] = True
         print("Sorry, you've used all your attempts. The secret code is:", secret_code)
         
         
