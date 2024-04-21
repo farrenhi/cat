@@ -9,9 +9,12 @@ def countdown_timer(duration, timer_completed):
     while time.time() < end_time:
         remaining_time = int(end_time - time.time())
         # Print timer on the same line
-        print(f"\rTime remaining: {remaining_time} seconds", end="")  
-        
+        print(f"\rTime remaining: {remaining_time} seconds. Enter a number:", end="")  
         sys.stdout.flush()
+        
+        # The \r character is a carriage return, which moves the cursor to the beginning of the line 
+        # without advancing to the next line, effectively allowing the new message 
+        # to overwrite the previous one.
         
         time.sleep(1)
 
@@ -21,7 +24,8 @@ def countdown_timer(duration, timer_completed):
 
 def input_numbers(timer_completed):
     while True:  # Continuously ask for input until the timer expires
-        user_input = input("Enter a number: ")
+        # user_input = input("\nEnter a number: ")
+        user_input = input()
         if timer_completed.is_set():  # Check if the timer has expired
             break
         print("user_input:", user_input)
@@ -38,7 +42,7 @@ def input_numbers(timer_completed):
 if __name__ == "__main__":
     timer_completed = threading.Event()
 
-    countdown_thread = threading.Thread(target=countdown_timer, args=(10, timer_completed))
+    countdown_thread = threading.Thread(target=countdown_timer, args=(60, timer_completed))
     input_thread = threading.Thread(target=input_numbers, args=(timer_completed,), daemon=True)
 
     countdown_thread.start()
