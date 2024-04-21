@@ -83,4 +83,4 @@ def play():
         print("Sorry, you've used all your attempts. The secret code is:", secret_code)
         
         
-play()
+# play()
