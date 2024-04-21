@@ -57,7 +57,7 @@ def input_numbers():
 if __name__ == "__main__":
     timer_completed = threading.Event()
 
-    countdown_thread = threading.Thread(target=countdown_timer, args=(10, timer_completed))
+    countdown_thread = threading.Thread(target=countdown_timer, args=(180, timer_completed))
     # input_thread = threading.Thread(target=input_numbers, args=(timer_completed, ), daemon=True)
     input_thread = threading.Thread(target=input_numbers, daemon=True)
 
