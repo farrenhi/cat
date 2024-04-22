@@ -13,7 +13,7 @@ def announce(user_attempt, number_boolean, position_boolean, \
     
     if difficulty_level == 0: # easy
         if number_true_count == len(number_boolean) and position_true_count == len(position_boolean):
-            announce_statement = "All good. You win!"
+            announce_statement = "You win!"
         else:
             announce_statement = explain(number_boolean, position_boolean, user_attempt)
     
@@ -21,14 +21,14 @@ def announce(user_attempt, number_boolean, position_boolean, \
         if number_true_count == 0:
             announce_statement = "All incorrect... Keep guessing!"
         elif number_true_count == len(number_boolean) and position_true_count == len(position_boolean):
-            announce_statement = "All good. You win!"
+            announce_statement = "You win!"
         else:
             # future task: how to make the plural correct... currently, (s) would be ok!
             announce_statement = f"{counter_correct_number} correct number(s) and {position_true_count} correct location(s)."
     
     elif difficulty_level == 2: # hard
         if number_true_count == len(number_boolean) and position_true_count == len(position_boolean):
-            announce_statement = "All good. You win!"
+            announce_statement = "You win!"
         else:
             announce_statement = "Incorrect... Keep guessing!"            
     else:

@@ -69,6 +69,8 @@ def get_code(total_values: int = 4, duplicate: bool = False) -> list:
     return numbers
 
 def call_api_code(max_value: int) -> list:
+    '''Call external API to get random number
+    '''
     url = f"https://www.random.org/integers/?num=4&min=0&max={max_value}&col=1&base=10&format=plain&rnd=new"
 
     response = requests.get(url)

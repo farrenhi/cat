@@ -17,16 +17,11 @@ def play():
     #####################
     num_attempts = 1
 
-    secret_code = model.get_code(total_values, duplicate)
-    # Future task: randomly, might take too long to generate non duplicate secret code
-
     view_command_line.present_to_user("Hello, ready for the game?")
 
+    secret_code = model.get_code(total_values, duplicate)
     view_command_line.present_to_user(f"Secret code ready! In testing: {secret_code}")
-
-    # Initialize an empty list to store user inputs
-
-    
+    # Future task: randomly, might take too long to generate non duplicate secret code
 
     # while loop for 10 attempts
     while num_attempts < max_attempts + 1:
@@ -42,10 +37,11 @@ def play():
                 view_command_line.print_history(shared_variables.user_attempts, shared_variables.feedbacks)
             elif model.validate_input(user_input):
                 is_user_input_valid = True
+                user_attempt = [int(digit) for digit in user_input] # convert string into integer
             else:
                 view_command_line.present_to_user("Please input 4 digit of numbers.")
 
-        user_attempt = [int(digit) for digit in user_input] # convert string into integer
+        
         # print(f"Your Guess Attempt {num_attempts}: ", user_attempt)
         view_command_line.present_to_user(f"Your Guess Attempt {num_attempts}: {user_attempt}")
         
@@ -67,8 +63,8 @@ def play():
         view_command_line.present_to_user('--------------------------')
         
         # minor task: this part could be replaced by "function validate"
-        if user_attempt == secret_code: 
-            view_command_line.present_to_user("Congratulations! You win!")
+        # if user_attempt == secret_code:
+        if position_boolean.count(True) == len(secret_code):  
             shared_variables.input_thread['end'] = True
             break
         
