@@ -68,6 +68,8 @@ def play():
         feedback = show_result.announce(user_attempt, number_boolean, position_boolean, \
             counter_correct_number, difficulty_level)
 
+        print("Feedback:", feedback)
+      
         feedbacks.append(feedback)
         
         print(f"Number of guesses remaining:", max_attempts - num_attempts + 1)
