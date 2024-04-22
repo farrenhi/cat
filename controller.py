@@ -4,8 +4,7 @@ import show_result
 import shared_variables
 import core_logic
 import view_command_line
-import module
-
+import model
 
 def play():
     # future task: need to do a figuration setting and load it into play function. currently, just put inside...
@@ -40,13 +39,12 @@ def play():
         while is_user_input_valid is False:
             view_command_line.present_to_user(f"remaining time: {shared_variables.remaining_time['time']} second(s)")
 
+            user_input = view_command_line.ask_user_guess()
             # user_input is a string data type!
-            # where to put this input? view.py?
-            user_input = input("Guess a sequence of four numbers (ex: 3102) or enter h for history: ")
             
             if user_input == "h":
                 view_command_line.print_history(user_attempts, feedbacks)
-            elif module.validate_input(user_input):
+            elif model.validate_input(user_input):
                 is_user_input_valid = True
             else:
                 view_command_line.present_to_user("Please input 4 digit of numbers.")
