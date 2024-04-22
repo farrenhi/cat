@@ -19,7 +19,6 @@ def print_history(user_attempts=[], feedbacks=[]):
 
 def play():
     # future task: need to do a figuration setting and load it into play function. currently, just put inside...
-    print("Hello, are you ready for the game?")
 
     ### game configuration
     difficulty_level = 1
@@ -32,6 +31,8 @@ def play():
     num_attempts = 1
 
     secret_code = getcode.get_code(total_values, duplicate)
+
+    print("Hello, are you ready for the game?")
 
     # Future task: this would take a wile to generate non duplicate secret code
     # how to solve this long wait?

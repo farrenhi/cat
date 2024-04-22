@@ -1,7 +1,7 @@
 import threading
 import time
 import sys
-import main
+import controller
 import shared_variables
 
 def countdown_timer(duration, timer_completed):
@@ -44,7 +44,7 @@ def countdown_timer(duration, timer_completed):
 #     # sys.exit()
 
 def input_numbers():
-    main.play()
+    controller.play()
 
 
 # def input_numbers(timer_completed):
