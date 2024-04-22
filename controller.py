@@ -20,11 +20,9 @@ def play():
     num_attempts = 1
 
     secret_code = getcode.get_code(total_values, duplicate)
-    
-    view_command_line.present_to_user("Hello, are you ready for the game?")
+    # Future task: randomly, might take too long to generate non duplicate secret code
 
-    # Future task: this would take a wile to generate non duplicate secret code
-    # how to solve this long wait?
+    view_command_line.present_to_user("Hello, are you ready for the game?")
 
     view_command_line.present_to_user(f"Secret code ready! In testing: {secret_code}")
 
@@ -70,7 +68,6 @@ def play():
         view_command_line.present_to_user(f"Number of guesses remaining: {max_attempts - num_attempts + 1}")
         view_command_line.present_to_user('--------------------------')
         
-
         # minor task: this part could be replaced by "function validate"
         if user_attempt == secret_code: 
             view_command_line.present_to_user("Congratulations! You win!")
