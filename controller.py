@@ -1,5 +1,3 @@
-import validate
-import show_result
 import shared_variables
 import view_command_line
 import model
@@ -39,7 +37,7 @@ def play():
         model.write_to_database(shared_variables.position_booleans, position_boolean)
         model.write_to_database(shared_variables.counter_correct_numbers, counter_correct_number)
 
-        feedback = show_result.announce(user_attempt, number_boolean, position_boolean, \
+        feedback = model.announce(user_attempt, number_boolean, position_boolean, \
             counter_correct_number, difficulty_level)
         model.write_to_database(shared_variables.feedbacks, feedback)
         view_command_line.present_to_user(f"Feedback: {feedback}")
@@ -56,9 +54,8 @@ def play():
         shared_variables.input_thread['end'] = True
         view_command_line.present_to_user(f"Sorry, you've used all your attempts. The secret code is: {secret_code}")
      
-
 def get_valid_attempt() -> list:
-    '''Get valid attempt guess from user
+    '''Get valid attempt guess input from user
     '''
     is_user_input_valid = False
     while is_user_input_valid is False:
@@ -76,4 +73,3 @@ def get_valid_attempt() -> list:
             view_command_line.present_to_user("Please input 4 digit of numbers.")
 
     return user_attempt
-

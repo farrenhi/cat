@@ -1,14 +1,6 @@
-# Module 1
-# use the api to randomly get a secret code
-
-# example link from the api website:
-# https://www.random.org/integers/?num=4&min=0&max=7&col=1&base=10&format=plain&rnd=new
-
-# future task: one digit per request!
 from typing import List, Tuple
 import requests
 import shared_variables
-
 
 def validate(secret_code: List[int], user_attempt: List[int]) -> Tuple[List[bool], List[bool], int]:
     '''Validate secret code and user attempt. Then, output validation result.
@@ -65,11 +57,60 @@ def validate(secret_code: List[int], user_attempt: List[int]) -> Tuple[List[bool
     return number_boolean, position_boolean, counter_correct_number
 
 
+def announce(user_attempt: List[int], 
+             number_boolean: List[bool], 
+             position_boolean: List[bool], 
+             counter_correct_number: int, 
+             difficulty_level: int = 1) -> str:
+    '''Announce the result based on the validation result
+    # based on "difficulty_level", it would decide to reveal full info or just partial
+    # difficulty level: easy, medium, hard
+    # easy, 0: full info
+    # medium, 1: as requested in the assignment. 
+    # hard, 2: only incorrect or correct info (no number or position info)
+    '''
+    
+    number_true_count = number_boolean.count(True)
+    position_true_count = position_boolean.count(True)
+    
+    if difficulty_level == 0: # easy
+        if number_true_count == len(number_boolean) and position_true_count == len(position_boolean):
+            announce_statement = "You win!"
+        else:
+            announce_statement = explain(number_boolean, position_boolean, user_attempt)
+    
+    elif difficulty_level == 1: # medium
+        if number_true_count == 0:
+            announce_statement = "All incorrect... Keep guessing!"
+        elif number_true_count == len(number_boolean) and position_true_count == len(position_boolean):
+            announce_statement = "You win!"
+        else:
+            # future task: how to make the plural correct... currently, (s) would be ok!
+            announce_statement = f"{counter_correct_number} correct number(s) and {position_true_count} correct location(s)."
+    
+    elif difficulty_level == 2: # hard
+        if number_true_count == len(number_boolean) and position_true_count == len(position_boolean):
+            announce_statement = "You win!"
+        else:
+            announce_statement = "Incorrect... Keep guessing!"            
+    else:
+        print("wrong input for difficulty level!")
+        
+    return announce_statement
 
-
-
-
-
+def explain(number_boolean: List[bool], 
+            position_boolean: List[bool], 
+            user_attempt: List[int]) -> str:
+    statement = []
+    print("Correctness:", position_boolean)
+    for index, value in enumerate(position_boolean):
+        if value is True:
+            statement.append(f"Position {index} is correct. ")
+        else:
+            if number_boolean[index] is False:
+                statement.append(f"Number {user_attempt[index]} is not in the code. ")
+    
+    return ''.join(statement)
 
 
 # def write_to_database(user_attempt: List[int]) -> None:
@@ -79,7 +120,7 @@ def write_to_database(dataset: list, data) -> None:
     '''
     dataset.append(data)
     return
-    
+   
 
 def validate_input(user_input: str) -> bool:
     '''validate if the input format is good
