@@ -5,18 +5,31 @@
 
 
 # def validate(secret_code=[0, 1, 3, 5], user_attempt=[0, 1, 5, 6]):
-def validate(secret_code, user_attempt):
-    '''
-    The validate function would check the secret_code and user_attempt.
-    Input: two arrays of numbers. secret_code and user_attempt
-    Output: two arrays of booleans. number correctness and position correctness 
+from typing import List, Tuple
+
+def validate(secret_code: List[int], user_attempt: List[int]) -> Tuple[List[bool], List[bool], int]:
+    '''Validate secret code and user attempt. Then, output validation result.
     
+    >>> validate([0, 1, 3, 5], [0, 1, 3, 5])
+    ([True, True, True, True], [True, True, True, True], 4)
+    
+    >>> validate([0, 1, 3, 5], [2, 2, 4, 6])
+    ([False, False, False, False], [False, False, False, False], 0)
+    
+    >>> validate([0, 1, 3, 5], [0, 2, 4, 6])
+    ([True, False, False, False], [True, False, False, False], 1)
+    
+    >>> validate([0, 1, 3, 5], [2, 2, 1, 1])
+    ([False, False, True, True], [False, False, False, False], 1)
+    
+    >>> validate([0, 1, 3, 5], [0, 1, 5, 6])
+    ([True, True, True, False], [True, True, False, False], 3)
     '''
+    
     number_boolean = []
     position_boolean = []
     counter_correct_number = 0
 
-    
     secret_code_set = set(secret_code)
     for index, value in enumerate(user_attempt):
         if value in secret_code_set:
@@ -33,10 +46,5 @@ def validate(secret_code, user_attempt):
     for number in secret_code_set:
         counter_correct_number += min(user_attempt.count(number), secret_code.count(number))
 
-    
-    # print("number_boolean:", number_boolean)
-    # print("position_boolean:", position_boolean)
-    # print("counter_correct_number:", counter_correct_number)
     return number_boolean, position_boolean, counter_correct_number
 
-# validate()
