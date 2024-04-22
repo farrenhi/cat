@@ -20,6 +20,7 @@ def play():
     view_command_line.present_to_user("Hello, ready for the game?")
 
     secret_code = model.get_code(total_values, duplicate)
+    model.write_to_database(shared_variables.secret_code, secret_code)
     view_command_line.present_to_user(f"Secret code ready! In testing: {secret_code}")
     # Future task: randomly, might take too long to generate non duplicate secret code
 
@@ -33,7 +34,7 @@ def play():
         num_attempts += 1
         
         number_boolean, position_boolean, counter_correct_number = \
-            validate.validate(secret_code=secret_code, user_attempt=user_attempt)
+            model.validate(secret_code=secret_code, user_attempt=user_attempt)
         model.write_to_database(shared_variables.number_booleans, number_boolean)
         model.write_to_database(shared_variables.position_booleans, position_boolean)
         model.write_to_database(shared_variables.counter_correct_numbers, counter_correct_number)
@@ -42,15 +43,12 @@ def play():
             counter_correct_number, difficulty_level)
         model.write_to_database(shared_variables.feedbacks, feedback)
         view_command_line.present_to_user(f"Feedback: {feedback}")
-      
-
         
         view_command_line.present_to_user(f"Number of guesses remaining: {max_attempts - num_attempts + 1}")
         view_command_line.present_to_user('--------------------------')
         
-        # minor task: this part could be replaced by "function validate"
-        # if user_attempt == secret_code:
-        if position_boolean.count(True) == len(secret_code):  
+        if position_boolean.count(True) == len(secret_code):
+            # this switch is for timer (concurrency. multi-threading)  
             shared_variables.input_thread['end'] = True
             break
         
