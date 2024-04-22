@@ -5,8 +5,18 @@
 # https://www.random.org/integers/?num=4&min=0&max=7&col=1&base=10&format=plain&rnd=new
 
 # future task: one digit per request!
-
+from typing import List
 import requests
+import shared_variables
+
+# def write_to_database(user_attempt: List[int]) -> None:
+def write_to_database(dataset: list, data) -> None:
+    '''Write data to a database. 
+    Command Line Interface version is just a list to store data in shared_variables.py 
+    '''
+    dataset.append(data)
+    return
+    
 
 def validate_input(user_input: str) -> bool:
     '''validate if the input format is good

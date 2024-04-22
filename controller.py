@@ -25,8 +25,8 @@ def play():
     view_command_line.present_to_user(f"Secret code ready! In testing: {secret_code}")
 
     # Initialize an empty list to store user inputs
-    user_attempts = []
-    feedbacks = []
+
+    
 
     # while loop for 10 attempts
     while num_attempts < max_attempts + 1:
@@ -39,7 +39,7 @@ def play():
             # user_input is a string data type!
             
             if user_input == "h":
-                view_command_line.print_history(user_attempts, feedbacks)
+                view_command_line.print_history(shared_variables.user_attempts, shared_variables.feedbacks)
             elif model.validate_input(user_input):
                 is_user_input_valid = True
             else:
@@ -51,7 +51,7 @@ def play():
         
         num_attempts += 1
 
-        user_attempts.append(user_attempt)
+        model.write_to_database(shared_variables.user_attempts, user_attempt)
         
         number_boolean, position_boolean, counter_correct_number = \
             validate.validate(secret_code=secret_code, user_attempt=user_attempt)
@@ -61,7 +61,7 @@ def play():
 
         view_command_line.present_to_user(f"Feedback: {feedback}")
       
-        feedbacks.append(feedback)
+        model.write_to_database(shared_variables.feedbacks, feedback)
         
         view_command_line.present_to_user(f"Number of guesses remaining: {max_attempts - num_attempts + 1}")
         view_command_line.present_to_user('--------------------------')
