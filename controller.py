@@ -1,8 +1,6 @@
-import getcode
 import validate
 import show_result
 import shared_variables
-import core_logic
 import view_command_line
 import model
 
@@ -19,10 +17,10 @@ def play():
     #####################
     num_attempts = 1
 
-    secret_code = getcode.get_code(total_values, duplicate)
+    secret_code = model.get_code(total_values, duplicate)
     # Future task: randomly, might take too long to generate non duplicate secret code
 
-    view_command_line.present_to_user("Hello, are you ready for the game?")
+    view_command_line.present_to_user("Hello, ready for the game?")
 
     view_command_line.present_to_user(f"Secret code ready! In testing: {secret_code}")
 
@@ -32,8 +30,8 @@ def play():
 
     # while loop for 10 attempts
     while num_attempts < max_attempts + 1:
-        is_user_input_valid = False
 
+        is_user_input_valid = False
         while is_user_input_valid is False:
             view_command_line.present_to_user(f"remaining time: {shared_variables.remaining_time['time']} second(s)")
 
