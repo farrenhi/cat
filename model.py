@@ -55,13 +55,15 @@ class Player:
 
         if self.difficulty_config[self.difficulty_level]['duplicate']:
             self.score += 10
+        if self.win:
+            self.score += 15
+
         self.score += self.difficulty_config[self.difficulty_level]['total_values'] 
         self.score += self.difficulty_config[self.difficulty_level]['announce_level'] * 10
         self.score += self.attempts_left
         self.score += self.time_left
         self.score += max(self.counter_correct_numbers) * max(self.counter_position_booleans)
-        if self.win:
-            self.score += 15
+
         return
 
         
@@ -174,14 +176,12 @@ def explain(number_boolean: List[bool],
     return ''.join(statement)
 
 
-# def write_to_database(user_attempt: List[int]) -> None:
 def write_to_database(dataset: list, data) -> None:
     '''Write data to a database. 
     Command Line Interface version is just a list to store data in shared_variables.py 
     '''
     dataset.append(data)
     return
-   
 
 def validate_input(user_input: str, length_input: int, upper_limit: int = None) -> bool:
     '''validate if the input format is good
@@ -201,8 +201,7 @@ def validate_input(user_input: str, length_input: int, upper_limit: int = None) 
     False
     '''
     
-    # future task, if 4 numbers, how do we remind the user that the input number is higher than upper limit?
-    
+    # future task, if 4 numbers, how do we remind the user that the input number is higher than upper limit?  
     if len(user_input) != length_input:
         return False
     if not user_input.isdigit():
@@ -227,7 +226,7 @@ def get_code(total_values: int = 4, duplicate: bool = False) -> list:
         find_no_duplicate = False
         while not find_no_duplicate:
             # future task: 
-            # 1. infinity loop or too many requests to external API?
+            # 1. infinity loop (if still duplicate) or too many requests to external API?
             # 2. time bottleneck: or try a different external API for non duplicates?
             numbers = call_api_code(max_value)
             numbers_set = set(numbers)
