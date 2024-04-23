@@ -8,7 +8,7 @@ class Controller:
         self.view = view_command_line.View()
         # self.model = model
 
-        self.players = [Player('Jane'), Player('Leo')] 
+        self.players = [Player('Player1')] 
         # future task: ask View layer for the user's name and put it here
     
     def run(self):
@@ -16,6 +16,10 @@ class Controller:
             self.play(player)
 
     def play(self, player):
+        name = self.view.ask_user_name()
+        if name is not None:
+            player.update(name=name)
+
         self.view.present_to_user(f"Hello {player.name}, ready for the game?")
         difficulty_level = self.get_valid_level()
         # model.write_to_database(shared_variables.difficulty_level, difficulty_level)
@@ -123,7 +127,13 @@ class Controller:
 
 # debug for class instantiation
 if __name__ == "__main__":
+
+    number_player = input("Please enter number of players? (1 or 2) ")
     controller = Controller()
+    
+    if number_player == "2":
+        controller.players.append(Player('Player2'))
+    
     controller.run()
     for player in controller.players:
         print(f"{player.name}: {player.score}")

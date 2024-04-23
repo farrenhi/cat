@@ -1,6 +1,10 @@
 from typing import List
 
 class View:
+    def ask_user_name(self):
+        name = input("What is your name? ")
+        return name
+
     def print_history(self, user_attempts: List[int] = [], feedbacks: List[str] = []) -> None:
         if not len(user_attempts):
             print("No history data...")
