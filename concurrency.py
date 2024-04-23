@@ -77,14 +77,9 @@ if __name__ == "__main__":
     # Daemon threads are background threads that 
     # do not prevent the program from exiting if they are still running when the main thread finishes.
 
-
-    
     input_thread.start()
     countdown_thread.start()
     
-    
-    
-
     # countdown_thread.join()
     # input_thread.join()
     sys.exit()
