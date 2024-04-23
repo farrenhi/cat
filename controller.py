@@ -1,95 +1,106 @@
-import shared_variables
+# import shared_variables
 import view_command_line
 import model
+from model import Player
 
 class Controller:
     def __init__(self):
         self.view = view_command_line.View()
         # self.model = model
 
-    def play(self):
-        # future task: need to do a figuration setting and load it into play function. currently, just put inside...
+        self.players = [Player('Jane'), Player('Leo')] 
+        # future task: ask View layer for the user's name and put it here
+    
+    def run(self):
+        for player in self.players:
+            self.play(player)
 
-        self.view.present_to_user("Hello, ready for the game?")
+    def play(self, player):
+        self.view.present_to_user(f"Hello {player.name}, ready for the game?")
         difficulty_level = self.get_valid_level()
-        model.write_to_database(shared_variables.difficulty_level, difficulty_level)
-
+        # model.write_to_database(shared_variables.difficulty_level, difficulty_level)
+        player.update(difficulty_level=difficulty_level)
+        
         # game configuration
-        duplicate = shared_variables.difficulty_config[difficulty_level]['duplicate']
-        total_values = shared_variables.difficulty_config[difficulty_level]['total_values']
-        max_attempts = shared_variables.difficulty_config[difficulty_level]['max_attempts']
-        announce_level = shared_variables.difficulty_config[difficulty_level]['announce_level']
+        duplicate = player.difficulty_config[player.difficulty_level]['duplicate']
+        total_values = player.difficulty_config[player.difficulty_level]['total_values']
+        max_attempts = player.difficulty_config[player.difficulty_level]['max_attempts']
+        announce_level = player.difficulty_config[player.difficulty_level]['announce_level']
         
         num_attempts = 1
 
         secret_code = model.get_code(total_values, duplicate)
-        model.write_to_database(shared_variables.secret_code, secret_code)
+        # model.write_to_database(shared_variables.secret_code, secret_code)
+        player.update(secret_code=secret_code)
         self.view.present_to_user(f"Secret code ready! In testing: {secret_code}")
         # Future task: randomly, might take too long to generate non duplicate secret code
 
         # while loop for 10 attempts
         while num_attempts < max_attempts + 1:
             
-            user_attempt = self.get_valid_attempt(total_values)
-            model.write_to_database(shared_variables.user_attempts, user_attempt)
+            user_attempt = self.get_valid_attempt(player)
+            # model.write_to_database(shared_variables.user_attempts, user_attempt)
+            player.user_attempts.append(user_attempt)
             self.view.present_to_user(f"Your Guess Attempt {num_attempts}: {user_attempt}")
             
             num_attempts += 1
             
             number_boolean, position_boolean, counter_correct_number, counter_position_boolean = \
                 model.validate(secret_code=secret_code, user_attempt=user_attempt)
-            model.write_to_database(shared_variables.number_booleans, number_boolean)
-            model.write_to_database(shared_variables.position_booleans, position_boolean)
-            model.write_to_database(shared_variables.counter_correct_numbers, counter_correct_number)
-            model.write_to_database(shared_variables.counter_position_booleans, counter_position_boolean)
-
+                
+            # model.write_to_database(shared_variables.number_booleans, number_boolean)
+            # model.write_to_database(shared_variables.position_booleans, position_boolean)
+            # model.write_to_database(shared_variables.counter_correct_numbers, counter_correct_number)
+            # model.write_to_database(shared_variables.counter_position_booleans, counter_position_boolean)
+            
+            player.number_booleans.append(number_boolean)
+            player.position_booleans.append(position_boolean)
+            player.counter_correct_numbers.append(counter_correct_number)
+            player.counter_position_booleans.append(counter_position_boolean)
+            
             feedback = model.announce(user_attempt, number_boolean, position_boolean, \
                 counter_correct_number, announce_level)
-            model.write_to_database(shared_variables.feedbacks, feedback)
+            # model.write_to_database(shared_variables.feedbacks, feedback)
+            player.feedbacks.append(feedback)
             self.view.present_to_user(f"Feedback: {feedback}")
             
-            shared_variables.input_thread['attempts_left'] = max_attempts - num_attempts + 1
-            attempts_left = shared_variables.input_thread['attempts_left']
-            self.view.present_to_user(f"Number of guesses remaining: {attempts_left}")
+            # shared_variables.input_thread['attempts_left'] = max_attempts - num_attempts + 1
+            player.attempts_left = max_attempts - num_attempts + 1
+            # attempts_left = shared_variables.input_thread['attempts_left']
+            
+            self.view.present_to_user(f"Number of guesses remaining: {player.attempts_left}")
             self.view.present_to_user('--------------------------')
             
             # Win! Add function calculate_score here
             if position_boolean.count(True) == len(secret_code):
                 # this switch is for timer (concurrency. multi-threading)  
-                shared_variables.input_thread['end'] = True
-                score = model.calculate_score(shared_variables.difficulty_config[difficulty_level],
-                                            attempts_left, shared_variables.remaining_time['time'], True,
-                                            shared_variables.counter_correct_numbers,
-                                            shared_variables.counter_position_booleans
-                                            )
-                self.view.present_to_user(f"Your score: {score}")
+                player.end, player.win = True, True
+                player.calculate_score()
+
+                self.view.present_to_user(f"Your score: {player.score}")
                 break
         
         # Loose! Add function calculate_score here
         # Add function calculate_score to timer side!
         if num_attempts == max_attempts + 1:
-            shared_variables.input_thread['end'] = True
-            self.view.present_to_user(f"Sorry, you've used all your attempts. The secret code is: {secret_code}")
-            
-            score = model.calculate_score(shared_variables.difficulty_config[difficulty_level],
-                                        attempts_left, shared_variables.remaining_time['time'], False,
-                                        shared_variables.counter_correct_numbers,
-                                        shared_variables.counter_position_booleans
-                                        )
-            self.view.present_to_user(f"Your score: {score}")
+            player.end = True
+            player.calculate_score()
+            self.view.present_to_user(f"Sorry, you've used all your attempts. The secret code is: {player.secret_code}")
+            self.view.present_to_user(f"Your score: {player.score}")
         
-    def get_valid_attempt(self, total_values) -> list:
+    def get_valid_attempt(self, player) -> list:
         '''Get valid attempt guess input from user
         '''
         is_user_input_valid = False
         while is_user_input_valid is False:
-            self.view.present_to_user(f"remaining time: {shared_variables.remaining_time['time']} second(s)")
+            self.view.present_to_user(f"remaining time: {player.time_left} second(s)")
 
+            total_values = player.difficulty_config[player.difficulty_level]['total_values']
             user_input = self.view.ask_user_guess(total_values)
             # user_input is a string data type!
             
             if user_input == "h":
-                self.view.print_history(shared_variables.user_attempts, shared_variables.feedbacks)
+                self.view.print_history(player.user_attempts, player.feedbacks)
             elif model.validate_input(user_input, 4): # 4 is hard coded here. Q: avoid this?
                 is_user_input_valid = True
                 user_attempt = [int(digit) for digit in user_input] # convert string into integer
@@ -110,8 +121,9 @@ class Controller:
                 self.view.present_to_user("Please enter one number between 0 and 2.")
         return level_input
 
-
 # debug for class instantiation
 if __name__ == "__main__":
     controller = Controller()
-    controller.play()
+    controller.run()
+    for player in controller.players:
+        print(f"{player.name}: {player.score}")

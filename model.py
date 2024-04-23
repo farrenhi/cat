@@ -1,7 +1,70 @@
 from typing import List, Tuple
 import requests
-import shared_variables
+# import shared_variables
 
+class Player:
+    difficulty_config = {
+        '0': {
+            'duplicate': False,
+            'total_values': 4,
+            'announce_level': 0,
+            'max_attempts': 15,
+        },
+        '1': {
+            'duplicate': True,
+            'total_values': 8,
+            'announce_level': 1,
+            'max_attempts': 10,
+        },
+        '2': {
+            'duplicate': True,
+            'total_values': 10,
+            'announce_level': 2,
+            'max_attempts': 5,
+        }
+    }
+    
+    # database: the info here should be saved to database
+    def __init__(self, name):
+        self.name = name
+        self.score = 0
+        self.time_left = 0
+        self.end = False
+        self.attempts_left = None
+        # self.difficulty_config = None
+        self.difficulty_level = None
+        self.secret_code = []
+        self.user_attempts = []
+        self.number_booleans = []
+        self.position_booleans = []
+        self.counter_correct_numbers = [] # list of int
+        self.counter_position_booleans = []
+        self.feedbacks = []
+        self.win = False
+    
+    def update(self, **kwargs):
+        for key, value in kwargs.items():
+            if hasattr(self, key):  # Check if the attribute exists in the class
+                setattr(self, key, value)  # Update the attribute with the new value
+            else:
+                raise AttributeError(f"'Player' object has no attribute '{key}'")
+
+    def calculate_score(self):
+        '''Calculate scores based on several factors
+        '''
+
+        if self.difficulty_config[self.difficulty_level]['duplicate']:
+            self.score += 10
+        self.score += self.difficulty_config[self.difficulty_level]['total_values'] 
+        self.score += self.difficulty_config[self.difficulty_level]['announce_level'] * 10
+        self.score += self.attempts_left
+        self.score += self.time_left
+        self.score += max(self.counter_correct_numbers) * max(self.counter_position_booleans)
+        if self.win:
+            self.score += 15
+        return
+
+        
 def validate(secret_code: List[int], user_attempt: List[int]) -> [List[bool], List[bool], int, int]:
     '''Validate secret code and user attempt. Then, output validation result.
     # this function is to validate if the user's attempt is correct or not
@@ -190,24 +253,3 @@ def call_api_code(max_value: int) -> list:
         print("External API failed to fetch numbers. Status code:", response.status_code)
         
         
-def calculate_score(configuration: dict, 
-                    attempts_left: int,
-                    time_left: int,
-                    win: bool,
-                    counter_correct_numbers: list,
-                    counter_correct_positions: list,
-                    ) -> int:
-    '''Calcualte scores based on several factors
-    '''
-    score = 0
-    if configuration['duplicate']:
-        score += 10
-    score += configuration['total_values'] 
-    score += configuration['announce_level'] * 10
-    score += attempts_left
-    score += time_left
-    score += max(counter_correct_numbers) * max(counter_correct_positions)
-    if win:
-        score += 15
-    
-    return score
