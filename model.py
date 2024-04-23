@@ -2,7 +2,7 @@ from typing import List, Tuple
 import requests
 import shared_variables
 
-def validate(secret_code: List[int], user_attempt: List[int]) -> Tuple[List[bool], List[bool], int]:
+def validate(secret_code: List[int], user_attempt: List[int]) -> [List[bool], List[bool], int, int]:
     '''Validate secret code and user attempt. Then, output validation result.
     # this function is to validate if the user's attempt is correct or not
     # the code will specify correct number and correct position (for full visibility)
@@ -54,7 +54,9 @@ def validate(secret_code: List[int], user_attempt: List[int]) -> Tuple[List[bool
     for number in secret_code_set:
         counter_correct_number += min(user_attempt.count(number), secret_code.count(number))
 
-    return number_boolean, position_boolean, counter_correct_number
+    counter_position_boolean = position_boolean.count(True)
+
+    return number_boolean, position_boolean, counter_correct_number, counter_position_boolean
 
 
 def announce(user_attempt: List[int], 
@@ -72,27 +74,23 @@ def announce(user_attempt: List[int],
     
     number_true_count = number_boolean.count(True)
     position_true_count = position_boolean.count(True)
+
+    if number_true_count == len(number_boolean) and position_true_count == len(position_boolean):
+        announce_statement = "You win!"
+        return announce_statement
     
     if difficulty_level == 0: # easy
-        if number_true_count == len(number_boolean) and position_true_count == len(position_boolean):
-            announce_statement = "You win!"
-        else:
-            announce_statement = explain(number_boolean, position_boolean, user_attempt)
+        announce_statement = explain(number_boolean, position_boolean, user_attempt)
     
     elif difficulty_level == 1: # medium
         if number_true_count == 0:
             announce_statement = "All incorrect... Keep guessing!"
-        elif number_true_count == len(number_boolean) and position_true_count == len(position_boolean):
-            announce_statement = "You win!"
         else:
             # future task: how to make the plural correct... currently, (s) would be ok!
             announce_statement = f"{counter_correct_number} correct number(s) and {position_true_count} correct location(s)."
     
     elif difficulty_level == 2: # hard
-        if number_true_count == len(number_boolean) and position_true_count == len(position_boolean):
-            announce_statement = "You win!"
-        else:
-            announce_statement = "Incorrect... Keep guessing!"            
+        announce_statement = "Incorrect... Keep guessing!"            
     else:
         print("wrong input for difficulty level!")
         
@@ -190,3 +188,26 @@ def call_api_code(max_value: int) -> list:
         return numbers 
     else:
         print("External API failed to fetch numbers. Status code:", response.status_code)
+        
+        
+def calculate_score(configuration: dict, 
+                    attempts_left: int,
+                    time_left: int,
+                    win: bool,
+                    counter_correct_numbers: list,
+                    counter_correct_positions: list,
+                    ) -> int:
+    '''Calcualte scores based on several factors
+    '''
+    score = 0
+    if configuration['duplicate']:
+        score += 10
+    score += configuration['total_values'] 
+    score += configuration['announce_level'] * 10
+    score += attempts_left
+    score += time_left
+    score += max(counter_correct_numbers) * max(counter_correct_positions)
+    if win:
+        score += 15
+    
+    return score

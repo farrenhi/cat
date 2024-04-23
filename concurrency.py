@@ -3,6 +3,8 @@ import time
 import sys
 import controller
 import shared_variables
+import view_command_line
+import model
 
 def countdown_timer(duration, timer_completed):
     # global remaining_time
@@ -28,6 +30,13 @@ def countdown_timer(duration, timer_completed):
         time.sleep(1)
 
     print(f"\nTime's up! Game ended. The secret code is: {shared_variables.secret_code}")
+    attempts_left = shared_variables.input_thread['attempts_left']
+    score = model.calculate_score(shared_variables.difficulty_config[shared_variables.difficulty_level[0]],
+                            attempts_left, shared_variables.remaining_time['time'], False,
+                            shared_variables.counter_correct_numbers,
+                            shared_variables.counter_position_booleans
+                            )
+    view_command_line.present_to_user(f"Your score: {score}")
     timer_completed.set()  # Set the flag to indicate that the timer has completed
     # sys.exit()
 

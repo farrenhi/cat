@@ -1,6 +1,8 @@
 remaining_time = {'time': 0}
 
-input_thread = {'end': False}
+input_thread = {'end': False,
+                'attempts_left': None,
+                }
 
 # difficulty_config = {'0': 'easy', '1': 'medium', '2': 'hard'}
 
@@ -38,6 +40,8 @@ number_booleans = []
 
 position_booleans = []
 
-counter_correct_numbers = []
+counter_correct_numbers = [] # list of int
+
+counter_position_booleans = []
 
 feedbacks = []

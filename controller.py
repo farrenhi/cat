@@ -31,28 +31,47 @@ def play():
         
         num_attempts += 1
         
-        number_boolean, position_boolean, counter_correct_number = \
+        number_boolean, position_boolean, counter_correct_number, counter_position_boolean = \
             model.validate(secret_code=secret_code, user_attempt=user_attempt)
         model.write_to_database(shared_variables.number_booleans, number_boolean)
         model.write_to_database(shared_variables.position_booleans, position_boolean)
         model.write_to_database(shared_variables.counter_correct_numbers, counter_correct_number)
+        model.write_to_database(shared_variables.counter_position_booleans, counter_position_boolean)
 
         feedback = model.announce(user_attempt, number_boolean, position_boolean, \
             counter_correct_number, announce_level)
         model.write_to_database(shared_variables.feedbacks, feedback)
         view_command_line.present_to_user(f"Feedback: {feedback}")
         
-        view_command_line.present_to_user(f"Number of guesses remaining: {max_attempts - num_attempts + 1}")
+        shared_variables.input_thread['attempts_left'] = max_attempts - num_attempts + 1
+        attempts_left = shared_variables.input_thread['attempts_left']
+        view_command_line.present_to_user(f"Number of guesses remaining: {attempts_left}")
         view_command_line.present_to_user('--------------------------')
         
+        # Win! Add function calculate_score here
         if position_boolean.count(True) == len(secret_code):
             # this switch is for timer (concurrency. multi-threading)  
             shared_variables.input_thread['end'] = True
+            score = model.calculate_score(shared_variables.difficulty_config[difficulty_level],
+                                          attempts_left, shared_variables.remaining_time['time'], True,
+                                          shared_variables.counter_correct_numbers,
+                                          shared_variables.counter_position_booleans
+                                          )
+            view_command_line.present_to_user(f"Your score: {score}")
             break
-        
+     
+    # Loose! Add function calculate_score here
+    # Add function calculate_score to timer side!
     if num_attempts == max_attempts + 1:
         shared_variables.input_thread['end'] = True
         view_command_line.present_to_user(f"Sorry, you've used all your attempts. The secret code is: {secret_code}")
+        
+        score = model.calculate_score(shared_variables.difficulty_config[difficulty_level],
+                                    attempts_left, shared_variables.remaining_time['time'], False,
+                                    shared_variables.counter_correct_numbers,
+                                    shared_variables.counter_position_booleans
+                                    )
+        view_command_line.present_to_user(f"Your score: {score}")
      
 def get_valid_attempt(total_values) -> list:
     '''Get valid attempt guess input from user
