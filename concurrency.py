@@ -6,6 +6,8 @@ import shared_variables
 import view_command_line
 import model
 
+view = view_command_line.View()
+
 def countdown_timer(duration, timer_completed):
     # global remaining_time
     start_time = time.time()
@@ -36,7 +38,7 @@ def countdown_timer(duration, timer_completed):
                             shared_variables.counter_correct_numbers,
                             shared_variables.counter_position_booleans
                             )
-    view_command_line.present_to_user(f"Your score: {score}")
+    view.present_to_user(f"Your score: {score}")
     timer_completed.set()  # Set the flag to indicate that the timer has completed
     # sys.exit()
 
@@ -52,8 +54,8 @@ def countdown_timer(duration, timer_completed):
 #         # task: i would like to print remaining time here. how should i do that?
 #     # sys.exit()
 
-def input_numbers():
-    controller.play()
+def input_numbers(view):
+    controller.play(view)
 
 
 # def input_numbers(timer_completed):
@@ -71,7 +73,7 @@ if __name__ == "__main__":
     # , daemon=True
     
     # input_thread = threading.Thread(target=input_numbers, args=(timer_completed, ), daemon=True)
-    input_thread = threading.Thread(target=input_numbers, daemon=True)
+    input_thread = threading.Thread(target=input_numbers, args=(view, ), daemon=True)
     
     # If daemon is set to True, it means the thread will run as a daemon thread. 
     # Daemon threads are background threads that 
