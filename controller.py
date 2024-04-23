@@ -5,17 +5,17 @@ import model
 def play():
     # future task: need to do a figuration setting and load it into play function. currently, just put inside...
 
-    ### game configuration
-    difficulty_level = 1
-    duplicate = True
-    total_values = 8 # total is 8, but it would be between 0 and 7.
-    max_attempts = 10
-    ###
-
-    #####################
-    num_attempts = 1
-
     view_command_line.present_to_user("Hello, ready for the game?")
+    difficulty_level = get_valid_level()
+    model.write_to_database(shared_variables.difficulty_level, difficulty_level)
+
+    # game configuration
+    duplicate = shared_variables.difficulty_config[difficulty_level]['duplicate']
+    total_values = shared_variables.difficulty_config[difficulty_level]['total_values']
+    max_attempts = shared_variables.difficulty_config[difficulty_level]['max_attempts']
+    announce_level = shared_variables.difficulty_config[difficulty_level]['announce_level']
+    
+    num_attempts = 1
 
     secret_code = model.get_code(total_values, duplicate)
     model.write_to_database(shared_variables.secret_code, secret_code)
@@ -38,7 +38,7 @@ def play():
         model.write_to_database(shared_variables.counter_correct_numbers, counter_correct_number)
 
         feedback = model.announce(user_attempt, number_boolean, position_boolean, \
-            counter_correct_number, difficulty_level)
+            counter_correct_number, announce_level)
         model.write_to_database(shared_variables.feedbacks, feedback)
         view_command_line.present_to_user(f"Feedback: {feedback}")
         
@@ -66,10 +66,23 @@ def get_valid_attempt() -> list:
         
         if user_input == "h":
             view_command_line.print_history(shared_variables.user_attempts, shared_variables.feedbacks)
-        elif model.validate_input(user_input):
+        elif model.validate_input(user_input, 4): # 4 is hard coded here. Q: avoid this?
             is_user_input_valid = True
             user_attempt = [int(digit) for digit in user_input] # convert string into integer
         else:
             view_command_line.present_to_user("Please input 4 digit of numbers.")
 
     return user_attempt
+
+def get_valid_level() -> int:
+    '''Get valid user input for difficulty level form view layer
+    '''
+    is_level_valid = False
+    while not is_level_valid:
+        level_input = view_command_line.ask_user_difficulty()
+        if model.validate_input(level_input, 1, upper_limit=3):
+            is_level_valid = True
+        else:
+            view_command_line.present_to_user("Please enter one number between 0 and 2.")
+    return level_input
+        

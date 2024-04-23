@@ -122,7 +122,7 @@ def write_to_database(dataset: list, data) -> None:
     return
    
 
-def validate_input(user_input: str) -> bool:
+def validate_input(user_input: str, length_input: int, upper_limit: int = None) -> bool:
     '''validate if the input format is good
     >>> validate_input("12345")
     False
@@ -140,9 +140,13 @@ def validate_input(user_input: str) -> bool:
     False
     '''
     
-    if len(user_input) != 4:
+    # future task, if 4 numbers, how do we remind the user that the input number is higher than upper limit?
+    
+    if len(user_input) != length_input:
         return False
     if not user_input.isdigit():
+        return False
+    if upper_limit is not None and int(user_input) >= upper_limit:
         return False
     return True
 
@@ -185,4 +189,4 @@ def call_api_code(max_value: int) -> list:
         # print("API result:", numbers)
         return numbers 
     else:
-        print("Failed to fetch numbers. Status code:", response.status_code)
+        print("External API failed to fetch numbers. Status code:", response.status_code)

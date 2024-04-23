@@ -27,7 +27,7 @@ def countdown_timer(duration, timer_completed):
         # print(remaining_time['time'])
         time.sleep(1)
 
-    print("\nTime's up! Game ended.")
+    print(f"\nTime's up! Game ended. The secret code is: {shared_variables.secret_code}")
     timer_completed.set()  # Set the flag to indicate that the timer has completed
     # sys.exit()
 
