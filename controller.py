@@ -25,7 +25,7 @@ def play():
     # while loop for 10 attempts
     while num_attempts < max_attempts + 1:
         
-        user_attempt = get_valid_attempt()
+        user_attempt = get_valid_attempt(total_values)
         model.write_to_database(shared_variables.user_attempts, user_attempt)
         view_command_line.present_to_user(f"Your Guess Attempt {num_attempts}: {user_attempt}")
         
@@ -54,14 +54,14 @@ def play():
         shared_variables.input_thread['end'] = True
         view_command_line.present_to_user(f"Sorry, you've used all your attempts. The secret code is: {secret_code}")
      
-def get_valid_attempt() -> list:
+def get_valid_attempt(total_values) -> list:
     '''Get valid attempt guess input from user
     '''
     is_user_input_valid = False
     while is_user_input_valid is False:
         view_command_line.present_to_user(f"remaining time: {shared_variables.remaining_time['time']} second(s)")
 
-        user_input = view_command_line.ask_user_guess()
+        user_input = view_command_line.ask_user_guess(total_values)
         # user_input is a string data type!
         
         if user_input == "h":

@@ -11,8 +11,8 @@ def present_to_user(statement: str = None) -> None:
     if statement:
         print(statement)
 
-def ask_user_guess() -> str:
-    user_input = input("Guess a sequence of four numbers (ex: 3102) or enter h for history: ")
+def ask_user_guess(total_values) -> str:
+    user_input = input(f"Guess four numbers between 0 and {total_values - 1} (ex: 3102) or enter h for history: ")
     return user_input
 
 # need to valid user input
