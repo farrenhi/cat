@@ -6,41 +6,6 @@ import shared_variables
 import view_command_line
 import model
 
-view = view_command_line.View()
-
-def countdown_timer(duration, timer_completed):
-    # global remaining_time
-    start_time = time.time()
-    end_time = start_time + duration
-
-    while time.time() < end_time:
-        # remaining_time = int(end_time - time.time())
-        time_updated = int(end_time - time.time())
-        shared_variables.remaining_time['time'] = time_updated
-        
-        if shared_variables.input_thread['end']:
-            sys.exit()
-        
-        # Print timer on the same line
-        # print(f"\rTime remaining: {remaining_time} seconds. Enter a number:", end="")  
-        # sys.stdout.flush()
-        
-        # The \r character is a carriage return, which moves the cursor to the beginning of the line 
-        # without advancing to the next line, effectively allowing the new message 
-        # to overwrite the previous one.
-        # print(remaining_time['time'])
-        time.sleep(1)
-
-    print(f"\nTime's up! Game ended. The secret code is: {shared_variables.secret_code}")
-    attempts_left = shared_variables.input_thread['attempts_left']
-    score = model.calculate_score(shared_variables.difficulty_config[shared_variables.difficulty_level[0]],
-                            attempts_left, shared_variables.remaining_time['time'], False,
-                            shared_variables.counter_correct_numbers,
-                            shared_variables.counter_position_booleans
-                            )
-    view.present_to_user(f"Your score: {score}")
-    timer_completed.set()  # Set the flag to indicate that the timer has completed
-    # sys.exit()
 
 # def input_numbers(timer_completed):
 #     # global remaining_time

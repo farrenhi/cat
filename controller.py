@@ -4,11 +4,11 @@ import model
 from model import Player
 
 class Controller:
-    def __init__(self):
-        self.view = view_command_line.View()
+    def __init__(self, view, players):
+        self.view = view
         # self.model = model
 
-        self.players = [Player('Player1')] 
+        self.players = players
         # future task: ask View layer for the user's name and put it here
     
     def run(self):
@@ -129,11 +129,17 @@ class Controller:
 if __name__ == "__main__":
 
     number_player = input("Please enter number of players? (1 or 2) ")
-    controller = Controller()
+    
+    view = view_command_line.View()
+    player1 = Player('Player1')
+    controller = Controller(view, [player1])
     
     if number_player == "2":
         controller.players.append(Player('Player2'))
     
     controller.run()
+
     for player in controller.players:
         print(f"{player.name}: {player.score}")
+        
+

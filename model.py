@@ -1,5 +1,7 @@
 from typing import List, Tuple
 import requests
+import time
+import sys
 # import shared_variables
 
 class Player:
@@ -252,3 +254,42 @@ def call_api_code(max_value: int) -> list:
         print("External API failed to fetch numbers. Status code:", response.status_code)
         
         
+
+def countdown_timer(duration, timer_completed, player):
+    start_time = time.time()
+    end_time = start_time + duration
+
+    while time.time() < end_time:
+        # remaining_time = int(end_time - time.time())
+        time_updated = int(end_time - time.time())
+        # shared_variables.remaining_time['time'] = time_updated
+        player.time_left = time_updated
+
+        # if shared_variables.input_thread['end']:        
+        if player.end:
+            sys.exit()
+        
+        # Print timer on the same line
+        # print(f"\rTime remaining: {remaining_time} seconds. Enter a number:", end="")  
+        # sys.stdout.flush()
+        
+        # The \r character is a carriage return, which moves the cursor to the beginning of the line 
+        # without advancing to the next line, effectively allowing the new message 
+        # to overwrite the previous one.
+        # print(remaining_time['time'])
+        time.sleep(1)
+
+    print(f"\nTime's up! Game ended. The secret code is: {player.secret_code}")
+    # attempts_left = shared_variables.input_thread['attempts_left']
+    # score = model.calculate_score(shared_variables.difficulty_config[shared_variables.difficulty_level[0]],
+    #                         attempts_left, shared_variables.remaining_time['time'], False,
+    #                         shared_variables.counter_correct_numbers,
+    #                         shared_variables.counter_position_booleans
+    #                         )
+    
+    player.end = True
+    
+    # view.present_to_user(f"Your score: {score}")
+    print(f"Your score: {player.score}")
+    timer_completed.set()  # Set the flag to indicate that the timer has completed
+    # sys.exit()
