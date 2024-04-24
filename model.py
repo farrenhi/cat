@@ -238,22 +238,38 @@ def get_code(total_values: int = 4, duplicate: bool = False) -> list:
     # print(numbers)
     return numbers
 
+# def call_api_code(max_value: int) -> list:
+#     '''Call external API to get random number
+#     '''
+#     url = f"https://www.random.org/integers/?num=4&min=0&max={max_value}&col=1&base=10&format=plain&rnd=new"
+
+#     response = requests.get(url)
+    
+#     if response.status_code == 200:
+#         numbers = response.text.split("\n")[:-1]  # Split the text by newline and remove the last empty element
+#         numbers = [int(num) for num in numbers]   # Convert the text numbers to integers
+#         # print("API result:", numbers)
+#         return numbers 
+#     else:
+#         print("External API failed to fetch numbers. Status code:", response.status_code)
+        
 def call_api_code(max_value: int) -> list:
     '''Call external API to get random number
     '''
-    url = f"https://www.random.org/integers/?num=4&min=0&max={max_value}&col=1&base=10&format=plain&rnd=new"
-
-    response = requests.get(url)
-    
-    if response.status_code == 200:
+    try:
+        url = f"https://www.random.org/integers/?num=4&min=0&max={max_value}&col=1&base=10&format=plain&rnd=new"
+        response = requests.get(url)
+        
+        response.raise_for_status()
         numbers = response.text.split("\n")[:-1]  # Split the text by newline and remove the last empty element
         numbers = [int(num) for num in numbers]   # Convert the text numbers to integers
-        # print("API result:", numbers)
-        return numbers 
-    else:
-        print("External API failed to fetch numbers. Status code:", response.status_code)
-        
-        
+        return numbers
+
+    except requests.exceptions.RequestException as error:
+        print("An error has occurred: ", error)
+        raise # sort of return
+
+            
 
 def countdown_timer(duration, timer_completed, player):
     start_time = time.time()
