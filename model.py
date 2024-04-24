@@ -212,6 +212,9 @@ def validate_input(user_input: str, length_input: int, upper_limit: int = None) 
         return False
     return True
 
+# Q: how to do unit test on this function? especially for infinity loop
+# only 3 test cases (based on difficulty levels)
+# A: mock_call_api_code.side_effect = [[0, 1, 1, 3], [0, 2, 2, 3], [0, 3, 3, 3], [0, 1, 2, 3]]
 def get_code(total_values: int = 4, duplicate: bool = False) -> list:
     '''This function will use external API to randomly select 4 secret codes. 
     the default setting for duplicate is False for easy level.    
@@ -230,8 +233,6 @@ def get_code(total_values: int = 4, duplicate: bool = False) -> list:
             numbers_set = set(numbers)
             if len(numbers_set) == 4:
                 find_no_duplicate = True
-    
-    # print(numbers)
     return numbers
 
         
