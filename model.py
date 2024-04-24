@@ -4,6 +4,7 @@ import time
 import sys
 # import shared_variables
 
+# Q: should we do unit test on this class Player? If yes, how to do it? (like decouple it...)
 class Player:
     difficulty_config = {
         '0': {
