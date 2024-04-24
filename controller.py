@@ -2,15 +2,50 @@
 import view_command_line
 import model
 from model import Player
+import threading
+import time
+
+class Timer:
+    def __init__(self, duration, callback, player):
+        self.duration = duration
+        self.callback = callback
+        self.player = player
+        self.player.time_left = self.duration
+        self._is_running = False
+        self.start_time = None
+        self.stop_time = None
+        self._stop_event = threading.Event()
+
+    def start(self):
+        self._is_running = True
+        self.start_time = time.time()
+        threading.Thread(target=self._run_timer).start()
+
+    def stop(self):
+        self._is_running = False
+        self.stop_time = time.time()
+        if self.player.win:
+            self.player.time_left = self.duration - int(self.stop_time - self.start_time)
+        self.callback(self.player)
+        self._stop_event.set()
+
+    def _run_timer(self):
+        # time.sleep(self.duration)  # Simulate timer running for 'duration' seconds
+        # if self._is_running:
+        #     self.callback(self.player)
+        while not self._stop_event.is_set() and time.time() - self.start_time < self.duration:
+            time.sleep(1)
+            self.player.time_left = self.duration - int(time.time() - self.start_time)
+
+        if not self._stop_event.is_set():
+            self.callback(self.player)
 
 class Controller:
-    def __init__(self, view, players):
+    def __init__(self, view, players, turn_duration):
         self.view = view
-        # self.model = model
-
         self.players = players
-        # future task: ask View layer for the user's name and put it here
-    
+        self.turn_duration = turn_duration
+
     def run(self):
         for player in self.players:
             self.play(player)
@@ -39,10 +74,17 @@ class Controller:
         self.view.present_to_user(f"Secret code ready! In testing: {secret_code}")
         # Future task: randomly, might take too long to generate non duplicate secret code
 
+        # start timer
+        self.view.present_to_user(f"{player.name}, your turn! Time starts now.")
+        timer = Timer(self.turn_duration, self.on_timer_end, player)
+        timer.start()
+
         # while loop for 10 attempts
-        while num_attempts < max_attempts + 1:
+        while not player.end and num_attempts < max_attempts + 1:
             
             user_attempt = self.get_valid_attempt(player)
+            if not user_attempt:
+                break
             # model.write_to_database(shared_variables.user_attempts, user_attempt)
             player.user_attempts.append(user_attempt)
             self.view.present_to_user(f"Your Guess Attempt {num_attempts}: {user_attempt}")
@@ -77,26 +119,34 @@ class Controller:
             
             # Win! Add function calculate_score here
             if position_boolean.count(True) == len(secret_code):
+                player.win = True
+                timer.stop()
                 # this switch is for timer (concurrency. multi-threading)  
-                player.end, player.win = True, True
                 player.calculate_score()
-
                 self.view.present_to_user(f"Your score: {player.score}")
                 break
         
         # Loose! Add function calculate_score here
         # Add function calculate_score to timer side!
+        timer.stop()
+        player.calculate_score()
         if num_attempts == max_attempts + 1:
-            player.end = True
-            player.calculate_score()
             self.view.present_to_user(f"Sorry, you've used all your attempts. The secret code is: {player.secret_code}")
             self.view.present_to_user(f"Your score: {player.score}")
+        else:
+            self.view.present_to_user("Time is up!")
+            self.view.present_to_user(f"Your score: {player.score}")
+            
+    def on_timer_end(self, player):
+        # self.view.present_to_user("Time's up!")
+        player.end = True
         
     def get_valid_attempt(self, player) -> list:
         '''Get valid attempt guess input from user
         '''
         is_user_input_valid = False
-        while is_user_input_valid is False:
+        user_attempt = None
+        while not player.end and not is_user_input_valid:
             self.view.present_to_user(f"remaining time: {player.time_left} second(s)")
 
             total_values = player.difficulty_config[player.difficulty_level]['total_values']
@@ -132,7 +182,7 @@ if __name__ == "__main__":
     
     view = view_command_line.View()
     player1 = Player('Player1')
-    controller = Controller(view, [player1])
+    controller = Controller(view, [player1], turn_duration=10)
     
     if number_player == "2":
         controller.players.append(Player('Player2'))
