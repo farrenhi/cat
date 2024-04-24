@@ -214,11 +214,7 @@ def validate_input(user_input: str, length_input: int, upper_limit: int = None) 
 
 def get_code(total_values: int = 4, duplicate: bool = False) -> list:
     '''This function will use external API to randomly select 4 secret codes. 
-    the default values for random selection is only 4 numbers. Just for easy level of the game
-    the default setting for duplicate is False for easy level.
-    
-    Future task: how to write doctest on this function?
-    
+    the default setting for duplicate is False for easy level.    
     '''
     max_value = 0 + total_values - 1 # including 0!
     
@@ -238,20 +234,6 @@ def get_code(total_values: int = 4, duplicate: bool = False) -> list:
     # print(numbers)
     return numbers
 
-# def call_api_code(max_value: int) -> list:
-#     '''Call external API to get random number
-#     '''
-#     url = f"https://www.random.org/integers/?num=4&min=0&max={max_value}&col=1&base=10&format=plain&rnd=new"
-
-#     response = requests.get(url)
-    
-#     if response.status_code == 200:
-#         numbers = response.text.split("\n")[:-1]  # Split the text by newline and remove the last empty element
-#         numbers = [int(num) for num in numbers]   # Convert the text numbers to integers
-#         # print("API result:", numbers)
-#         return numbers 
-#     else:
-#         print("External API failed to fetch numbers. Status code:", response.status_code)
         
 def call_api_code(max_value: int) -> list:
     '''Call external API to get random number
@@ -268,9 +250,7 @@ def call_api_code(max_value: int) -> list:
     except requests.exceptions.RequestException as error:
         print("An error has occurred: ", error)
         raise # sort of return
-
-            
-
+         
 def countdown_timer(duration, timer_completed, player):
     start_time = time.time()
     end_time = start_time + duration
