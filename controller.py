@@ -124,7 +124,7 @@ class Controller:
                 # this switch is for timer (concurrency. multi-threading)  
                 player.calculate_score()
                 self.view.present_to_user(f"Your score: {player.score}")
-                break
+                return
         
         # Loose! Add function calculate_score here
         # Add function calculate_score to timer side!
@@ -178,7 +178,7 @@ class Controller:
 # debug for class instantiation
 if __name__ == "__main__":
 
-    number_player = input("Please enter number of players? (1 or 2) ")
+    number_player = input("Please enter number of player(s)? (1 or 2) ")
     
     view = view_command_line.View()
     player1 = Player('Player1')
