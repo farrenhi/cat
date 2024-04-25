@@ -5,6 +5,7 @@ from model import Player
 import threading
 import time
 
+# Q: timer class should be moved to model.py. (future task)
 class Timer:
     def __init__(self, duration, callback, player):
         self.duration = duration
@@ -50,7 +51,9 @@ class Controller:
         for player in self.players:
             self.play(player)
 
-    # Q: how to do unit test? Should I make this function into more blocks?
+    # Q: how to do unit test? Now, it is too complicated. 
+    # Should I make this function into more blocks firstly?
+    
     def play(self, player):
         name = self.view.ask_user_name()
         if name is not None:
