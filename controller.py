@@ -79,6 +79,13 @@ class Controller:
         self.view.present_to_user(f"{player.name}, your turn! Time starts now.")
         timer = Timer(self.turn_duration, self.on_timer_end, player)
         timer.start()
+        
+        # Ask user if they would like to exchange 3 attempts for a single digit of the secret code.
+        trade = self.view.ask_user_trade()
+        if trade is not None:
+            if trade == "1":
+                max_attempts -= 3
+                self.view.present_to_user(f"First digit is {secret_code[0]}!")                
 
         # while loop for 10 attempts
         while not player.end and num_attempts < max_attempts + 1:
