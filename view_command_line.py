@@ -7,7 +7,7 @@ class View:
         return name
     
     def ask_user_trade(self):
-        print("Do you want to exchange 2 attempts to reveal a digit of the secret code?")
+        print("Do you want to exchange 3 attempts to reveal a digit of the secret code?")
         answer = input("Enter 1 for yes or 2 for no: ")
         return answer
 
