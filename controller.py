@@ -87,6 +87,8 @@ class Controller:
                 max_attempts -= 3
                 self.view.present_to_user(f"First digit is {secret_code[0]}!")                
 
+        player.attempts_left = max_attempts
+        
         # while loop for 10 attempts
         while not player.end and num_attempts < max_attempts + 1:
             
@@ -137,12 +139,16 @@ class Controller:
         # Loose! Add function calculate_score here
         # Add function calculate_score to timer side!
         timer.stop()
-        player.calculate_score()
+
         if num_attempts == max_attempts + 1:
             self.view.present_to_user(f"Sorry, you've used all your attempts. The secret code is: {player.secret_code}")
+            player.calculate_score()
             self.view.present_to_user(f"Your score: {player.score}")
+        elif num_attempts == 1:
+            self.view.present_to_user(f"Your score: 0")
         else:
             self.view.present_to_user("Time is up!")
+            player.calculate_score()
             self.view.present_to_user(f"Your score: {player.score}")
             
     def on_timer_end(self, player):
