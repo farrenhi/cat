@@ -50,6 +50,7 @@ class Controller:
         for player in self.players:
             self.play(player)
 
+    # Q: how to do unit test? Should I make this function into more blocks?
     def play(self, player):
         name = self.view.ask_user_name()
         if name is not None:

@@ -56,3 +56,34 @@ def test_get_valid_level_invalid_input(mock_present_to_user, mock_ask_user_diffi
     # Ensure present_to_user was called with the correct message
     # count display times of this message: "Please enter one number between 0 and 2."   
     assert mock_present_to_user.call_count == 3
+    
+    
+@patch('view_command_line.View.present_to_user')
+@patch('view_command_line.View.ask_user_guess')
+def test_get_valid_attempt(mock_ask_user_guess, mock_present_to_user):
+    # Mock player and its attributes
+    player = model.Player('June')  # Create a mock player instance
+    player.end = False
+    player.time_left = 10
+    player.difficulty_config = {'0': {'total_values': 4}}
+    player.difficulty_level = '0'
+
+    # Mock view responses
+    mock_ask_user_guess.side_effect = ['3 0 1 2', '567', 'h', '0123']
+
+    # Create controller instance
+    view = view_command_line.View()
+    controller_instance = controller.Controller(view, [], turn_duration=10)
+
+    # Call the function
+    result = controller_instance.get_valid_attempt(player)
+
+    # Assertions
+    mock_present_to_user.assert_any_call(f"remaining time: {player.time_left} second(s)")
+    mock_ask_user_guess.assert_called_with(4) 
+    mock_present_to_user.assert_any_call("Please input 4 digit of numbers.")
+    
+    assert mock_present_to_user.call_count == 6 
+    # count "present_to_user" is called
+    
+    assert result == [0, 1, 2, 3]
