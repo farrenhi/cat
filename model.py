@@ -23,7 +23,7 @@ class Player:
             'duplicate': True,
             'total_values': 10,
             'announce_level': 2,
-            'max_attempts': 5,
+            'max_attempts': 6,
         }
     }
     

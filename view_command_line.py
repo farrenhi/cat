@@ -5,6 +5,11 @@ class View:
     def ask_user_name(self):
         name = input("What is your name? ")
         return name
+    
+    def ask_user_trade(self):
+        print("Do you want to exchange 2 attempts to reveal a digit of the secret code?")
+        answer = input("Enter 1 for yes or 2 for no: ")
+        return answer
 
     def print_history(self, user_attempts: List[int] = [], feedbacks: List[str] = []) -> None:
         if not len(user_attempts):
