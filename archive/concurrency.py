@@ -2,7 +2,7 @@ import threading
 import time
 import sys
 import controller
-import shared_variables
+
 import view_command_line
 import model
 

@@ -1,5 +1,6 @@
 from typing import List
 
+# Q: unit test on view?
 class View:
     def ask_user_name(self):
         name = input("What is your name? ")
