@@ -57,7 +57,7 @@ class Controller:
     
     def play(self, player):
         name = self.view.ask_user_name()
-        if name is not None:
+        if name:
             player.update(name=name)
 
         self.view.present_to_user(f"Hello {player.name}, ready for the game?")
