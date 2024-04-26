@@ -29,6 +29,7 @@ class Timer:
             self.player.time_left = self.duration - int(self.stop_time - self.start_time)
         self.callback(self.player)
         self._stop_event.set()
+        # want to terminate the thread just call: thread.event.set()
 
     def _run_timer(self):
         # time.sleep(self.duration)  # Simulate timer running for 'duration' seconds
