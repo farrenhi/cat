@@ -5,7 +5,9 @@ from model import Player
 import threading
 import time
 
-# Q: timer class should be moved to model.py. (future task)
+# Q: should timer class be moved to model.py? (future task)
+# in controller
+# timer = Timer(self.turn_duration, self.on_timer_end, player)
 class Timer:
     def __init__(self, duration, callback, player):
         self.duration = duration
@@ -28,19 +30,22 @@ class Timer:
         if self.player.win:
             self.player.time_left = self.duration - int(self.stop_time - self.start_time)
         self.callback(self.player)
+        # so, in controller class, the callback function: self.on_timer_end
+        # this function:  player.end = True
+        
         self._stop_event.set()
         # want to terminate the thread just call: thread.event.set()
 
     def _run_timer(self):
-        # time.sleep(self.duration)  # Simulate timer running for 'duration' seconds
-        # if self._is_running:
-        #     self.callback(self.player)
         while not self._stop_event.is_set() and time.time() - self.start_time < self.duration:
             time.sleep(1)
             self.player.time_left = self.duration - int(time.time() - self.start_time)
 
         if not self._stop_event.is_set():
             self.callback(self.player)
+            
+        # so, in controller class, the callback function: self.on_timer_end
+        # this function:  player.end = True
 
 class Controller:
     def __init__(self, view, players, turn_duration):
@@ -97,7 +102,7 @@ class Controller:
         while not player.end and num_attempts < max_attempts + 1:
             
             user_attempt = self.get_valid_attempt(player)
-            if not user_attempt:
+            if not user_attempt: # in case if time is up, but user did not enter anything yet. Then, break while loop!
                 break
             # model.write_to_database(shared_variables.user_attempts, user_attempt)
             player.user_attempts.append(user_attempt)
@@ -148,7 +153,7 @@ class Controller:
             self.view.present_to_user(f"Sorry, you've used all your attempts. The secret code is: {player.secret_code}")
             player.calculate_score()
             self.view.present_to_user(f"Your score: {player.score}")
-        elif num_attempts == 1:
+        elif num_attempts == 1: # this mean the user did not even try a guess. (default is 1) so zero score!
             self.view.present_to_user(f"Your score: 0")
         else:
             self.view.present_to_user("Time is up!")
