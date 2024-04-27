@@ -81,7 +81,11 @@ class Controller:
         secret_code = model.get_code(total_values, duplicate)
         # model.write_to_database(shared_variables.secret_code, secret_code)
         player.update(secret_code=secret_code)
-        self.view.present_to_user(f"Secret code ready! In testing: {secret_code}")
+        self.view.present_to_user(f"Secret code ready!")
+        
+        # developer mode to reveal secret code
+        # self.view.present_to_user(f"Secret code ready! In testing: {secret_code}")
+        
         # Future task: randomly, might take too long to generate non duplicate secret code
 
         # start timer
@@ -205,7 +209,7 @@ if __name__ == "__main__":
     
     view = view_command_line.View()
     player1 = Player('Player1')
-    controller = Controller(view, [player1], turn_duration=10)
+    controller = Controller(view, [player1], turn_duration=30)
     
     if number_player == "2":
         controller.players.append(Player('Player2'))
