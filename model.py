@@ -55,6 +55,8 @@ class Player:
     def calculate_score(self):
         '''Calculate scores based on several factors
         '''
+        
+        # comment: what about just import the configure from the other layer.
 
         if self.difficulty_config[self.difficulty_level]['duplicate']:
             self.score += 10
@@ -230,6 +232,11 @@ def get_code(total_values: int = 4, duplicate: bool = False) -> list:
             # future task: 
             # 1. infinity loop (if still duplicate) or too many requests to external API?
             # 2. time bottleneck: or try a different external API for non duplicates?
+            
+            # single call?
+            # 100 characters. get non repeated.
+            # exclude the numbers. lottery box
+            
             numbers = call_api_code(max_value)
             numbers_set = set(numbers)
             if len(numbers_set) == 4:
@@ -239,6 +246,7 @@ def get_code(total_values: int = 4, duplicate: bool = False) -> list:
         
 def call_api_code(max_value: int) -> list:
     '''Call external API to get random number
+    example output
     '''
     try:
         url = f"https://www.random.org/integers/?num=4&min=0&max={max_value}&col=1&base=10&format=plain&rnd=new"
@@ -252,6 +260,24 @@ def call_api_code(max_value: int) -> list:
     except requests.exceptions.RequestException as error:
         print("An error has occurred: ", error)
         raise # sort of return
+
+# def call_api_code_2(max_value: int) -> list:
+#     '''Call external API to get random number
+#     '''
+#     try:
+#         url = f"https://www.random.org/integers/?num=40&min=0&max={max_value}&col=1&base=10&format=plain&rnd=new"
+#         response = requests.get(url)
+        
+#         response.raise_for_status()
+#         numbers = response.text.split("\n")[:-1]  # Split the text by newline and remove the last empty element
+#         numbers = [int(num) for num in numbers]   # Convert the text numbers to integers
+#         return numbers
+
+#     except requests.exceptions.RequestException as error:
+#         print("An error has occurred: ", error)
+#         raise # sort of return
+
+
          
 def countdown_timer(duration, timer_completed, player):
     start_time = time.time()

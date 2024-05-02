@@ -33,6 +33,8 @@ class Timer:
         # so, in controller class, the callback function: self.on_timer_end
         # this function:  player.end = True
         
+        # comment: probably not rely on this other method to trigger
+        
         self._stop_event.set()
         # want to terminate the thread just call: thread.event.set()
 
@@ -81,10 +83,10 @@ class Controller:
         secret_code = model.get_code(total_values, duplicate)
         # model.write_to_database(shared_variables.secret_code, secret_code)
         player.update(secret_code=secret_code)
-        self.view.present_to_user(f"Secret code ready!")
+        # self.view.present_to_user(f"Secret code ready!")
         
         # developer mode to reveal secret code
-        # self.view.present_to_user(f"Secret code ready! In testing: {secret_code}")
+        self.view.present_to_user(f"Secret code ready! In testing: {secret_code}")
         
         # Future task: randomly, might take too long to generate non duplicate secret code
 
@@ -148,6 +150,24 @@ class Controller:
                 player.calculate_score()
                 self.view.present_to_user(f"Your score: {player.score}")
                 return
+            # robot is activated!
+            else:
+                # robot_code = model.call_api_code(total_values - 1)
+                robot_code = secret_code
+                print("robot_guess:", robot_code)
+                
+                robot_number_boolean, robot_position_boolean, robot_counter_correct_number, robot_counter_position_boolean = \
+                model.validate(secret_code=secret_code, user_attempt=robot_code)
+                
+                if robot_position_boolean.count(True) == len(secret_code):
+                    timer.stop()
+                    player.end = True
+                    player.calculate_score()
+                    self.view.present_to_user(f"Your score: {player.score}. Sorry, robot wins!")
+
+                
+                
+                
         
         # Loose! Add function calculate_score here
         # Add function calculate_score to timer side!
